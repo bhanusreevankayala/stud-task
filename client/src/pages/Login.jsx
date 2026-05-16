@@ -14,7 +14,7 @@ function Login() {
       // LOGIN
       if (isLogin) {
         const res = await axios.post(
-          "http://localhost:5000/api/auth/login",
+          "https://stud-task-server.onrender.com/api/auth/login",
           {
             email,
             password,
@@ -43,7 +43,7 @@ function Login() {
       // REGISTER
       else {
         await axios.post(
-          "http://localhost:5000/api/auth/register",
+          "https://stud-task-server.onrender.com/api/auth/register",
           {
             name,
             email,
