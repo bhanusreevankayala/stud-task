@@ -3,26 +3,37 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
-const taskRoutes = require("./routes/taskRoutes");
-const authRoutes = require("./routes/authRoutes");
-
 const app = express();
 
-app.use(cors());
+// CORS
+app.use(
+  cors({
+    origin: "https://stud-task-kappa.vercel.app",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/tasks", taskRoutes);
+// ROUTES
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/tasks", require("./routes/taskRoutes"));
 
+// ROOT
+app.get("/", (req, res) => {
+  res.send("API Running...");
+});
+
+// DATABASE
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+  .then(() => {
+    console.log("MongoDB Connected");
 
-app.get("/", (req, res) => {
-  res.send("API Running");
-});
-
-app.listen(process.env.PORT || 5000, () => {
-  console.log("Server running");
-});
+    app.listen(process.env.PORT || 5000, () => {
+      console.log("Server running");
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
